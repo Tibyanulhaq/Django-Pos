@@ -1,0 +1,107 @@
+{% load humanize %}
+<style>
+    #uni_modal .modal-footer {
+        display: none
+    }
+</style>
+<div class="container-fluid">
+    <div id="outprint">
+        <div class="lh-1 mb-1" >
+            <center><small class="fw-bold" style="font-size: 18px;">MEHAR BROTHERS</small></center>
+        </div>
+        <div class="lh-1">
+            <center><small class="fw-bold">Shop # 1168 Almadina Commercial Market </small></center>
+            <center><small class="fw-bold">Tata Bazaar Faisalabad</small></center>
+            <center><small class="fw-bold">Wattapp:03188187162 | Mobile:03076025063</small></center>
+        </div>
+        <hr>
+        <div class="lh-1">
+            <div>
+                <span style="font-weight: bold;">Name:</span>{{transaction.name}} <br>
+                <span style="font-weight: bold;">Mobile:</span>{{transaction.mobile}} <br>
+                <span style="font-weight: bold;">Data:</span> {{ transaction.date_added|date:"M d Y" }} <br>
+                <span style="font-weight: bold;">Transaction Code:</span> {{ transaction.code }}
+            </div>
+        </div>
+        <div class="clear-fix py-3"></div>
+        <div class="lh-2">
+            <div class="d-flex w-100 align-items-end border-bottom">
+                <div class="col-3 text-center fw-bold">Qty <small>(KG/M)</small></div>
+                <div class="col-6 text-center fw-bold">Product</div>
+                <div class="col-3 text-center fw-bold">Amount(PKR)</div>
+            </div>
+            {% for item in salesItems %}
+            <div class="d-flex w-100 align-items-end mt-2 border-bottom">
+                <div class="col-2 text-center fw-bold">{{ item.qty|intcomma }}<small>({{ item.scale }})</small> </div>
+                <div class="col-6 fw-bold">
+                    <div class="lh-1 ml-5">
+                        <center><small>{{ item.product_id }}</small></center><br>
+                        <!-- <small>{{ item.price|intcomma }}</small><br> -->
+                    </div>
+                </div>
+                <div class="col-4 text-end fw-bold">{{ item.total|intcomma }}</div>
+            </div>
+            {% endfor %}
+            <br><br>
+           
+            <div class="d-flex w-100 align-items-end">
+                <div class="col-6 text-start fw-bold">Sub_Total</div>
+                <div class="col-6 text-end" style="font-weight: 12px;">{{ transaction.sub_total |floatformat:"0" | intcomma }}</div>
+            </div>
+           
+            <div class="d-flex w-100 align-items-end">
+                <div class="col-6 text-start fw-bold">Discount:</div>
+                <div class="col-6 text-end" style="font-weight: 12px;">{{ transaction.disc_amount |floatformat:"0"|intcomma }}</div>
+            </div>
+            <div class="d-flex w-100 align-items-end">
+                <div class="col-6 text-start fw-bold">Total</div>
+                <div class="col-6 text-end" style="font-weight: bolder;">{{ transaction.grand_total |floatformat:"0" | intcomma }}</div>
+            </div>
+            <div class="d-flex w-100 align-items-end">
+                <div class="col-6 text-start fw-bold">Payment</div>
+                <div class="col-6 text-end" style="font-weight: 12px;">{{ transaction.payment |floatformat:"0"|intcomma }}</div>
+            </div>
+            <div class="d-flex w-100 align-items-end border-bottom">
+                <div class="col-6 text-start fw-bold">Udhaar</div>
+                <div class="col-6 text-end" style="font-weight: 12px;">{{ transaction.udhaar |floatformat:"0"|intcomma }}</div>
+            </div>
+            <br>
+            
+            <div>
+                <p style="font-weight: bold;text-align: right;">بی مال کی کوئی واپسی ياتبدیلی نہ ہوگی ـ</p>
+            </div>
+        </div>
+
+    </div>
+    <hr>
+   
+    <div class="clear-fix py-3"></div>
+    <div class="d-flex w-100 justify-content-end">
+        <button class="btn btn-light bg-gradient border rounded-0 btn-sm me-1" type="button" id="receipt_print"><i class="mdi mdi-printer"></i> Print</button>
+        <button class="btn btn-secondary bg-gradient border rounded-0 btn-sm" type="button" data-bs-dismiss="modal"><i class="mdi mdi-close"></i> Close</button>
+    </div>
+</div>
+<script>
+    $(function() {
+        $('#receipt_print').click(function() {
+            var head = $('head').clone()
+            var p = $('#outprint').clone()
+            var el = $("<div>")
+            head.append('<style>body{background-color:unset !important}</style>')
+            el.append(head)
+            el.find('title').text("Receipt - Print View")
+            el.append(p)
+            start_loader()
+            var nw = window.open('', '_blank', "width=600,height=700,left=300, top = 200")
+            nw.document.write(el.html())
+            nw.document.close()
+            setTimeout(() => {
+                nw.print()
+                setTimeout(() => {
+                    nw.close()
+                    end_loader()
+                }, 250)
+            }, 300)
+        })
+    })
+</script>

@@ -1,0 +1,75 @@
+{% extends "posApp/base.html" %} {% block pageContent %}
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">Udhaar List</h4>
+            
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <colgroup>
+                    <col width="4%">
+                    <col width="21%">
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="12%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="8%">
+                    <col width="10%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1">#</th>
+                        <th class="text-center py-1">Customer Name</th>
+                        <th class="text-center py-1">Customer Mobile</th>
+                        <th class="text-center py-1">Trans.code</th>
+                        <th class="text-center py-1">Total</th>
+                        <th class="text-center py-1">Payment</th>
+                        <th class="text-center py-1">Udhaar</th>
+                        <th class="text-center py-1">Status</th>
+                        <th class="text-center py-1">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in udhaar %}
+                    <tr>
+                        <td class="px-2 py-1 text-center">{{ cat.id }}</td>
+                        <td class="px-2 py-1 text-start">{{ cat.name }}</td>
+                        <td class="px-2 py-1 text-start">{{ cat.mobile }}</td>
+                        <td class="px-2 py-1 text-start">{{ cat.code }}</td>
+                        <td class="px-2 py-1 text-center">{{cat.grand_total}}</td>
+                        <td class="px-2 py-1 text-center">{{cat.payment}}</td>
+                        <td class="px-2 py-1 text-center">{{cat.udhaar}}</td>
+                        <td class="px-2 py-1 text-center">
+                            {% if cat.udhaar == 0 %}
+                            <span class="badge bg-primary rounded-pill px-3">Cleared</span> {% else %}
+                            <span class="badge bg-secondary rounded-pill px-3">Not Cleared</span> {% endif %}
+                        </td>
+                        <td class="px-2 py-1 text-center">
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded edit-data" type="button" data-id="{{ cat.pk }}" title="Edit">
+                                <i class="material-icons mdc-button__icon">edit</i>
+                            </button>
+                            
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('.edit-data').click(function() {
+            uni_modal("Edit Sales", "{% url 'manage_category-page' %}?id=" + $(this).attr('data-id'))
+        })
+    })
+
+</script>
+{% endblock ScriptBlock %}

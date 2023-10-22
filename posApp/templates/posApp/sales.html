@@ -1,0 +1,118 @@
+{% extends "posApp/base.html" %} {% load humanize %} {% block pageContent %}
+
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card py-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title mb-0">Sales</h3>
+           
+           
+        </div>
+    </div>
+</div>
+<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+    <div class="mdc-card">
+        <div class="table-responsive">
+            <table class="table table-bordered bg-light">
+                <colgroup>
+                    <col width="3%">
+                    <col width="13%">
+                    <col width="9%">
+                    <col width="12%">
+                    <col width="8%">
+                    
+                    <col width="8%">
+                    <col width="8%">
+                    <col width="12%">
+                    <col width="10%">
+                    <col width="3%">
+                    <col width="10%">
+                    <col width="8%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center py-1" style="color: black; font-weight: bolder;" scope="col">#</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Customer Name</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Customer Mobile</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Trans. Code</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Sub_Total</th>
+                        
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Disc_Amount</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Total</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Payment</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Udhaar</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Items</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">DateTime</th>
+                        <th class="text-center py-1" scope="col" style="color: black; font-weight: bolder;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for sale in sale_data %}
+                    <tr>
+                        <th class="px-2 py-1 text-center">{{ sale.id }}</th>
+                        <td class="px-2 py-1 text-center">{{ sale.name }}</td>
+                        <td class="px-2 py-1 text-center">{{ sale.mobile }}</td>
+                        <td class="px-2 py-1 text-start">{{ sale.code }}</td>
+                        <td class="px-2 py-1 text-end">{{ sale.sub_total|intcomma }}</td>
+                        <td class="px-2 py-1 text-end">{{ sale.disc_amount|intcomma:2 }}</td>
+                        <td class="px-2 py-1 text-end">{{ sale.grand_total|intcomma }}</td>
+                        <td class="px-2 py-1 text-end">{{ sale.payment|intcomma }}</td>
+                        <td class="px-2 py-1 text-end">{{ sale.udhaar|intcomma }}</td>
+                        <td class="px-2 py-1 text-center">{{ sale.item_count|intcomma }}</td>
+                        <td class="px-2 py-1 text-start">{{ sale.date_added|date:"F j, Y g:i A" }}</td>
+                        <td class="px-2 py-1 text-center">
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--light mdc-ripple-upgraded view-data" type="button" data-id="{{ sale.id }}" title="View Receipt">
+                                <i class="material-icons mdc-button__icon">receipt</i>
+                            </button>
+                            <button class="mdc-button mdc-button--raised p-1 icon-button filled-button--danger mdc-ripple-upgraded delete-data" type="button" data-id="{{ sale.id }}" data-code="{{ sale.code }}" title="Delete">
+                                <i class="material-icons mdc-button__icon">deleteoutline</i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('.view-data').click(function() {
+            uni_modal("Transaction's Receipt", "{% url 'receipt-modal' %}?id=" + $(this).attr('data-id'))
+        })
+        $('.delete-data').click(function() {
+            _conf("Are you sure to delete <b>" + $(this).attr('data-code') + "</b> Transaction record?", "delete_sale", [$(this).attr('data-id')])
+        })
+
+    })
+
+    function delete_sale($id) {
+        start_loader();
+        $.ajax({
+            headers: {
+                "X-CSRFToken": '{{csrf_token}}'
+            },
+            url: "{% url 'delete-sale' %}",
+            method: "POST",
+            data: {
+                id: $id
+            },
+            dataType: "json",
+            error: err => {
+                console.log(err)
+                alert_toast("An error occured.", 'error');
+                end_loader();
+            },
+            success: function(resp) {
+                if (typeof resp == 'object' && resp.status == 'success') {
+                    location.reload();
+                } else {
+                    alert_toast("An error occured.", 'error');
+                    end_loader();
+                }
+            }
+        })
+    }
+</script>
+{% endblock ScriptBlock %}
