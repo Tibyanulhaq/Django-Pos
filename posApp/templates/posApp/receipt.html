@@ -1,9 +1,10 @@
 {% load humanize %}
 <style>
     #uni_modal .modal-footer {
-        display: none
+        display: none;
     }
 </style>
+
 <div class="container-fluid">
     <div id="outprint">
         <div class="lh-1 mb-1" >
@@ -92,7 +93,7 @@
             el.find('title').text("Receipt - Print View")
             el.append(p)
             start_loader()
-            var nw = window.open('', '_blank', "width=600,height=700,left=300, top = 200")
+            var nw = window.open('', '_blank', "width=800,height=800,left=300, top = 200")
             nw.document.write(el.html())
             nw.document.close()
             setTimeout(() => {
