@@ -18,7 +18,7 @@
                             <select id="product-id" class="form-select form-select-sm">
                                 <option value="" disabled selected></option>
                                 {% for product in products %}
-                                    <option value="{{ product.pk }}">{{ product }}</option>
+                                    <option value="{{ product.id }}">{{ product }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -33,14 +33,14 @@
                     
                     <div class="col-lg-4 col-md-4 col-sm-6 col-12">
                         <div class="form-group mb-3">
-                            <button class="btn btn-light btn-sm bg-gradient border rounded-0 text-start" type="button" id="add_item"><i class="mdi mdi-plus"></i> Add Item</button>
+                            <button class="btn btn-dark btn-sm bg-gradient border rounded-2 text-start" type="button" id="add_item"><i class="mdi mdi-plus"></i> Add Item</button>
                         </div>
                     </div>
                 </div>
             </fieldset>
             <fieldset>
                 <div class="d-flex row col-12" id="POS-field">
-                    <div class="col-lg-8 col-md-6 col-sm-12 col-12 bg-gradient bg-light border h-100">
+                    <div class="col-lg-8 col-md-6 col-sm-12 col-12  bg-light border h-100" >
                         <table class="table table-bordered">
                             <colgroup>
                                 <col width="5%">
@@ -51,7 +51,7 @@
                                 <col width="20%">
                             </colgroup>
                             <thead>
-                                <tr class="bg-dark bg-gradient bg-opacity-50 text-light">
+                                <tr class="bg-dark bg-secondary bg-opacity-50 text-light">
                                     <th class="py-1 px-2 text-center text-light"></th>
                                     <th class="py-1 px-2 text-center text-light">QTY</th>
                                     <th class="py-1 px-2 text-center text-light">Product</th>
@@ -65,7 +65,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-12 col-12 bg-gradient bg-dark bg-opacity-50 border h-100">
+                    <div class="col-lg-4 col-md-6 col-sm-12 col-12 border h-100 bg-dark" >
                         <div class="col-12 py-2 px-2">
                             <dl>
                                 <dt class="h4 fw-bold text-light">Sub Total</dt>
@@ -83,6 +83,7 @@
                                     <span class="h3 fw-bold" id="disc_amount">0.00</span>
                                 </dd>
                                 <dt class="h4 fw-bold text-light">Grand Total</dt>
+                               
                                 <dd class="text-end py-1 px-2 rounded-1 bg-light">
                                     <input type="hidden" name="grand_total" value="0">
                                     <input type="hidden" name="payment" value="0">
@@ -91,16 +92,17 @@
                                     <input type="hidden" name="customer_mobile" value="1111111111">
                                     <span class="h3 fw-bold" id="grand_total">0.00</span>
                                 </dd>
+                                <div>
+                                    <div class="col-12 text-end mt-5">
+                                        <button class="btn btn-dark btn-lg rounded-3" type="button" id="check_out"><i class="mdi mdi-save"></i> Checkout</button>
+                                    </div>
+                                </div>
                             </dl>
                         </div>
                     </div>
                 </div>
             </fieldset>
-            <div>
-                <div class="col-12 text-end">
-                    <button class="btn btn-primary btn-sm rounded-0" type="button" id="check_out"><i class="mdi mdi-save"></i> Checkout</button>
-                </div>
-            </div>
+            
         </form>
     </div>
 </div>

@@ -30,6 +30,7 @@ urlpatterns = [
     path('save_customer',views.save_customer,name='save-customer-page'),
     path('delete_customer',views.delete_customer,name='delete-customer'),
     path('show-customer-sale',views.search_customer,name='show-customer-sale'),
+    path('search-sale',views.search_sale,name='search-sale'),
     # path('search_customer',views.manage_customer_search,name='manage_customer-search'),
    
     # path('employees', views.employees, name="employee-page"),

@@ -477,4 +477,21 @@ def search_customer(request):
     return render(request, "posApp/search.html", context)   
    
 
+@login_required
+def search_sale(request):
+    searched=""
+    if request.method=='POST':
+        data=request.POST
+        if str(data['search']).isnumeric():
+            searched=Sales.objects.filter(code=data['search']).all()
+           
 
+    context={
+        'searched':searched,
+    }
+    return render(request, "posApp/searchsale.html", context)    
+
+       
+
+
+    
